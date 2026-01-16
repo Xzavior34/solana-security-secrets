@@ -1,73 +1,92 @@
-# Welcome to your Lovable project
 
-## Project info
+# 🛡️ Solana Security Academy: The Zero-to-Hero Reference
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+> **Live Interactive Experience:** [INSERT YOUR LOVABLE URL HERE]
+> *A gamified, terminal-based deep dive into the 5 most common Solana vulnerabilities.*
 
-## How can I edit this code?
+## 📖 The Philosophy
 
-There are several ways of editing your application.
+Security on Solana is not about complex cryptography; it’s about **Account Validation**. In a world where every account is an untrusted input, the developer’s job is to prove three things:
 
-**Use Lovable**
+1. **Who** is calling the program? (Signer Authorization)
+2. **What** data is being passed? (Type & Owner Validation)
+3. **Where** is the state stored? (PDA Verification)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+This repository serves as a side-by-side educational reference, contrasting "broken" code with "secure" Anchor implementations.
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## 🛠️ The 5 Security Modules
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 1. Signer Authorization (The Fake ID Attack)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+**The Vulnerability:** An instruction allows a withdrawal because it fails to check if the `authority` account actually signed the transaction.
 
-Follow these steps:
+* **Vulnerable:** Accepts `AccountInfo` and trustingly moves funds.
+* **Secure:** Enforces the `Signer<'info>` type, triggering Anchor's internal signature check.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### 2. Type Cosplay (The Doppelgänger)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+**The Vulnerability:** A program expects a "User Profile" account but an attacker passes a "Vault" account. If both have similar data structures, the program might overwrite sensitive vault data.
 
-# Step 3: Install the necessary dependencies.
-npm i
+* **Vulnerable:** Uses raw `AccountInfo` and deserializes manually.
+* **Secure:** Uses `Account<'info, Profile>`, where Anchor validates the **Account Discriminator**.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+### 3. PDA Verification (The Locksmith’s Error)
+
+**The Vulnerability:** Using a user-provided PDA without verifying that it matches the "Canonical Bump." This allows attackers to create "fake" PDAs that bypass logic.
+
+* **Vulnerable:** Manually derives an address but doesn't check if the user's input matches.
+* **Secure:** Uses Anchor's `seeds = [...], bump` constraint to automatically re-derive and validate the address.
+
+### 4. Owner Check (The Trojan Horse)
+
+**The Vulnerability:** The program interacts with an account it assumes is a Token Account, but it's actually an account owned by a malicious program.
+
+* **Vulnerable:** Fails to verify `account.owner == Token_Program_ID`.
+* **Secure:** Employs the `#[account(owner = ...)]` constraint or Anchor's `Account<'info, TokenAccount>` wrapper.
+
+### 5. Integer Overflow (The Infinite Mint)
+
+**The Vulnerability:** Using standard math (`+`, `-`) in older Rust/Solana versions, allowing numbers to wrap around (e.g., `0 - 1 = 2^64 - 1`).
+
+* **Vulnerable:** Raw `balance -= amount;`.
+* **Secure:** Uses `checked_sub(amount).ok_or(Error)?`.
+
+---
+
+## ⚡ Anchor vs. Pinocchio: The Safety Spectrum
+
+This project also explores the **Pinocchio Framework**. While Anchor provides **Macros** (Heavy Armor) that handle these checks automatically, Pinocchio offers **Minimalist Efficiency** (The Scalpel).
+
+* **Anchor:** Best for rapid, secure development where the framework handles the "boring" security checks.
+* **Pinocchio:** Best for high-performance instructions where every compute unit counts, but requires the developer to manually write every check listed above.
+
+---
+
+## 🧪 Running the "Heist" Tests
+
+Each module includes a "Capture The Flag" style test.
+
+1. **The Hack:** Successfully exploits the `vulnerable` module.
+2. **The Shield:** Attempts the same hack on the `secure` module and fails.
+
+```bash
+anchor test
+
 ```
 
-**Edit a file directly in GitHub**
+*Look for the 🥷 and 🛡️ emojis in your terminal output!*
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## 🏆 Bounty Requirements Checklist
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+* [x] **5+ Programs:** Cover 5 distinct real-world attack patterns.
+* [x] **Side-by-Side:** `mod vulnerable` vs `mod secure` in every file.
+* [x] **Educational Content:** Full interactive portal + Deep-dive README.
+* [x] **Open Source:** MIT Licensed.
 
-## What technologies are used for this project?
+---
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Would you like me to generate the **Master lib.rs** code that matches this README so you can paste it into your project?
