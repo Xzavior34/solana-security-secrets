@@ -1,7 +1,7 @@
 
 # 🛡️ Solana Security Academy: The Zero-to-Hero Reference
 
-> **Live Interactive Experience:** [INSERT YOUR LOVABLE URL HERE]
+> **Live Interactive Experience:** https://solana-security-secrets.vercel.app/
 > *A gamified, terminal-based deep dive into the 5 most common Solana vulnerabilities.*
 
 ## 📖 The Philosophy
@@ -87,6 +87,3 @@ anchor test
 * [x] **Educational Content:** Full interactive portal + Deep-dive README.
 * [x] **Open Source:** MIT Licensed.
 
----
-
-### Would you like me to generate the **Master lib.rs** code that matches this README so you can paste it into your project?
