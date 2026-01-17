@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Shield, Home, BookOpen, Code, Skull, CheckCircle, Terminal, Download } from 'lucide-react';
+import { Shield, Home, BookOpen, Code, Skull, CheckCircle, Terminal, Download, GraduationCap } from 'lucide-react';
 
 const navItems = [
   { path: '/', label: 'Home', icon: Home },
@@ -9,6 +9,7 @@ const navItems = [
   { path: '/exploit', label: 'Exploit', icon: Skull },
   { path: '/fix', label: 'Fix', icon: CheckCircle },
   { path: '/tests', label: 'Tests', icon: Terminal },
+  { path: '/deep-dive', label: 'Deep Dive', icon: GraduationCap },
   { path: '/download', label: 'Download', icon: Download },
 ];
 
