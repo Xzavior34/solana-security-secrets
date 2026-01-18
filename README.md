@@ -77,7 +77,3 @@ anchor test
 * [x] **Educational Content:** Full interactive portal + Deep-dive README.
 * [x] **Open Source:** MIT Licensed.
 
-
-```
-
-**Now** your submission is complete. This README tells the story perfectly. Congratulations, Xavier.
